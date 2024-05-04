@@ -34,23 +34,20 @@
          UI.drawLine(EXIT_RIGHT, 10, EXIT_RIGHT, 700);
          /*# YOUR CODE HERE */
 
-         Animal a1 = new Animal("grasshopper", "dave", 300, 100);
-         Animal a2 = new Animal("dinosaur", "steve", 200, 200);
-         Animal a3 = new Animal("turtle", "john doe", 500, 300);
+         Animal a1 = new Animal("grasshopper", "dave", (Math.random()*(START_RIGHT-START_LEFT))+START_LEFT, 100);
+         Animal a2 = new Animal("dinosaur", "steve", (Math.random()*(START_RIGHT-START_LEFT))+START_LEFT, 300);
+         Animal a3 = new Animal("turtle", "john doe", (Math.random()*(START_RIGHT-START_LEFT))+START_LEFT, 500);
          routine(a1);
          routine(a2);
          routine(a3);
 
          while(true){
-            UI.println("left x pos:" + closestToLeft(a1, a2, a3).getX());
-            UI.println("right x pos:" + closestToRight(a1, a2, a3).getX());
-
             if(closestToLeft(a1, a2, a3).getX() < EXIT_LEFT ){
-                UI.println("Left wins");
+                closestToLeft(a1, a2, a3).shout("I won");
                 break;
             }
             if(closestToRight(a1, a2, a3).getX() > EXIT_RIGHT ){
-                UI.println("Right wins");
+                closestToLeft(a1, a2, a3).shout("I won");
                 break;
             }
 
@@ -60,45 +57,42 @@
          }
 
 
-
-
- 
      }
 
         public void routine (Animal a){
         /*# YOUR CODE HERE */
 
-        a.introduce("Howdy");
-        for(int i=0; i < 5; i +=1){
+        a.introduce("Hi");
+        for(int i=0; i < 6; i +=1){
             a.goLeft();
         }
-        for(int i=0; i < 10; i +=1){
+        a.jump(30);
+        for(int i=0; i < 12; i +=1){
             a.goRight();
         }
-        for(int i=0; i < 5; i +=1){
+        a.jump(30);
+        for(int i=0; i < 6; i +=1){
             a.goLeft();
         }
-
         a.jump(50);
+        a.shout("Ready");
     }
  
      /** return the animal closest to the left */
      public Animal closestToLeft (Animal a1, Animal a2, Animal a3){
-         if(a1.getX() < a2.getX() && a1.getX() < a3.getX()){
+         if(a1.getX() <= a2.getX() && a1.getX() <= a3.getX()){
             return(a1);
          }
-         if(a2.getX() < a1.getX() && a2.getX() < a3.getX()){
+         if(a2.getX() < a1.getX() && a2.getX() <= a3.getX()){
             return(a2);
          }
          if(a3.getX() < a2.getX() && a3.getX() < a1.getX()){
             return(a3);
          }
 
-         UI.print("error in closest to left");
          return(a1);
  
      }
-
         /** return the animal closest to the left */
         public Animal closestToRight (Animal a1, Animal a2, Animal a3){
         if(a1.getX() > a2.getX() && a1.getX() > a3.getX()){
@@ -111,13 +105,10 @@
             return(a3);
         }
 
-        UI.print("error in closest to left");
         return(a1);
 
     }
- 
- 
- 
+
      /** Make buttons to let the user run the methods */
      public void setupGUI(){
          UI.initialise();

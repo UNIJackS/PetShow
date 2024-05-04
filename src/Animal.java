@@ -8,6 +8,8 @@
  * ID:
  */
 
+import java.awt.Color;
+
 import ecs100.*;
 
 /**
@@ -37,6 +39,9 @@ public class Animal {
     private int wordsWidth = 160;
     private int wordsHeight = 45;
     private int wordSize = 12;
+
+    // used to keep track of the animation frame of the death star
+    private int frame_num = 0;
 
     /** Constructor requires
      *  - the type of animal,
@@ -120,6 +125,7 @@ public class Animal {
 
     /** Make the Animal say something in a speech box */
     public void speak(String words) {
+        UI.setColor(Color.black);
         double boxX = this.imageX;
         double boxY = this.imageY - this.wordsHeight - 20;
 
@@ -139,12 +145,14 @@ public class Animal {
 
     /** Make the Animal introduce itself with a greeting word */
     public void introduce(String greeting) {
+        UI.setColor(Color.black);
         this.speak(greeting + " my name is " + name);
         this.speak("I am a " + animal);
     }
 
     /** Makes the Animal shout in big block letter */
     public void shout(String words) {
+        UI.setColor(Color.black);
         UI.setFontSize(20);
         this.speak(words.toUpperCase());
         UI.setFontSize(wordSize);
@@ -152,6 +160,7 @@ public class Animal {
 
     /** Make the Animal think something in a speech bubble */
     public void think(String words) {
+        UI.setColor(Color.black);
         double bubbleX = this.imageX;
         double bubbleY = this.imageY - this.wordsHeight - 2;
         double circleX = this.imageX;
@@ -196,9 +205,36 @@ public class Animal {
      * All the public methods that change the image call draw.
      */
     private void draw(){
-        String fname = null;
-        fname = "animals/" + this.animal +"-"+this.direction+".gif"; 
-        UI.drawImage(fname, this.imageX, this.imageY, this.imageWidth, this.imageHeight);
+
+        //draws the dark grey out line of the death star
+        UI.setColor(Color.gray.darker().darker());
+        UI.fillOval(this.imageX, this.imageY, this.imageWidth, this.imageHeight);
+        //draws the black dish of the death star
+        UI.setColor(Color.black);
+        UI.fillOval(imageX + (3f/20f)*imageWidth, imageY+ (3f/20f)*imageHeight, (3f/10f)*imageWidth, (3f/10f)*imageHeight);
+        //draws the black equatorial line of the death star
+        UI.setLineWidth(1);
+        //The plus one to the iamge_x is to make sure the whole death star is erased other wise a balck dot is some times left
+        UI.drawLine(imageX+1, imageY +(1f/2f)*imageHeight, imageX +imageWidth, imageY +(1f/2f)*imageHeight);
+
+        //draws the green charging circle of the death star laser
+        if(frame_num > 5 && frame_num <10){
+            UI.setColor(Color.green);
+            UI.fillOval(imageX + (2f/10f)*imageWidth, imageY+ (2f/10f)*imageHeight, (2f/10f)*imageWidth, (2f/10f)*imageHeight);
+            //adds one to the frame number so the animation progresses
+            frame_num += 1;
+        //draws the green laser of the death star    
+        }else if(frame_num > 10 && frame_num <25){
+            UI.setColor(Color.green);
+            UI.setLineWidth(3);
+            UI.drawLine(imageX + (3f/10f)*imageWidth, imageY+ (3f/10f)*imageHeight, imageX, imageY);
+            //resets the frame number of the animation so it restarts
+            frame_num =0;
+        }else{
+            //adds one to the frame number so the animation progresses
+            frame_num += 1;
+        }
+        
     }
 
 }
